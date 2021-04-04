@@ -44,7 +44,11 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
     @Override
     public Header<OrderGroupApiResponse> read(Long id) {
-        return null;
+
+        return orderGroupRepository.findById(id)
+                                    .map(orderGroup -> response(orderGroup))        // .map(this::response)
+                                    .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     @Override
@@ -59,18 +63,18 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
     private Header<OrderGroupApiResponse> response(OrderGroup orderGroup) {
         OrderGroupApiResponse body = OrderGroupApiResponse.builder()
-                .id(orderGroup.getId())
-                .status(orderGroup.getStatus())
-                .orderType(orderGroup.getOrderType())
-                .revAddress(orderGroup.getRevAddress())
-                .revName(orderGroup.getRevName())
-                .paymentType(orderGroup.getPaymentType())
-                .totalPrice(orderGroup.getTotalPrice())
-                .totalQuantity(orderGroup.getTotalQuantity())
-                .orderAt(orderGroup.getOrderAt())
-                .arrivalDate(orderGroup.getArrivalDate())
-                .userId(orderGroup.getUser().getId())
-                .build();
+                                                          .id(orderGroup.getId())
+                                                          .status(orderGroup.getStatus())
+                                                          .orderType(orderGroup.getOrderType())
+                                                          .revAddress(orderGroup.getRevAddress())
+                                                          .revName(orderGroup.getRevName())
+                                                          .paymentType(orderGroup.getPaymentType())
+                                                          .totalPrice(orderGroup.getTotalPrice())
+                                                          .totalQuantity(orderGroup.getTotalQuantity())
+                                                          .orderAt(orderGroup.getOrderAt())
+                                                          .arrivalDate(orderGroup.getArrivalDate())
+                                                          .userId(orderGroup.getUser().getId())
+                                                          .build();
 
         return Header.OK(body);
     }
