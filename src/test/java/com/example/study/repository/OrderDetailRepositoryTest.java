@@ -26,8 +26,8 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
         orderDetail.setCreatedAt(LocalDateTime.now());
         orderDetail.setCreatedBy("AdminServer");
 
-        orderDetail.setOrderGroupId(1L);    // 어떠한 장비구니에
-        orderDetail.setItemId(1L);          // 어떠한 상품
+        //orderDetail.setOrderGroupId(1L);    // 어떠한 장비구니에
+        //orderDetail.setItemId(1L);          // 어떠한 상품
 
 
         OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
