@@ -32,7 +32,11 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 
     @Override
     public Header<CategoryApiResponse> read(Long id) {
-        return null;
+
+        return categoryRepository.findById(id)
+                                 .map(category -> response(category))
+                                 .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     @Override
