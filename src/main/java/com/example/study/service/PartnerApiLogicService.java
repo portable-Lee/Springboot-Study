@@ -53,7 +53,28 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
     @Override
     public Header<PartnerApiResponse> update(Header<PartnerApiRequest> request) {
-        return null;
+
+        PartnerApiRequest body = request.getData();
+
+        return partnerRepository.findById(body.getId())
+                                .map(partner -> {
+                                    partner.setName(body.getName())
+                                            .setStatus(body.getStatus())
+                                            .setAddress(body.getAddress())
+                                            .setCallCenter(body.getCallCenter())
+                                            .setPartnerNumber(body.getPartnerNumber())
+                                            .setBusinessNumber(body.getBusinessNumber())
+                                            .setCeoName(body.getCeoName())
+                                            .setRegisteredAt(body.getRegisteredAt())
+                                            .setUnregisteredAt(body.getUnregisteredAt())
+                                            .setCategory(categoryRepository.getOne(body.getCategoryId()));
+
+                                    return partner;
+                                })
+                                .map(changePartner -> partnerRepository.save(changePartner))
+                                .map(newPartner -> response(newPartner))
+                                .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     @Override

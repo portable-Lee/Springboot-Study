@@ -57,11 +57,11 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
         return orderDetailRepository.findById(body.getId())
                                     .map(orderDetail -> {
                                         orderDetail.setStatus(body.getStatus())
-                                                .setArrivalDate(body.getArrivalDate())
-                                                .setQuantity(body.getQuantity())
-                                                .setTotalPrice(body.getTotalPrice())
-                                                .setOrderGroup(orderGroupRepository.getOne(body.getOrderGroupId()))
-                                                .setItem(itemRepository.getOne(body.getItemId()));
+                                                   .setArrivalDate(body.getArrivalDate())
+                                                   .setQuantity(body.getQuantity())
+                                                   .setTotalPrice(body.getTotalPrice())
+                                                   .setOrderGroup(orderGroupRepository.getOne(body.getOrderGroupId()))
+                                                   .setItem(itemRepository.getOne(body.getItemId()));
 
                                         return orderDetail;
                                     })
