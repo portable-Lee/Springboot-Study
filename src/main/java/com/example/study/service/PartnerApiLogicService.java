@@ -79,7 +79,13 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
     @Override
     public Header delete(Long id) {
-        return null;
+        return partnerRepository.findById(id)
+                                .map(partner -> {
+                                    partnerRepository.delete(partner);
+
+                                    return Header.OK();
+                                })
+                                .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
     private Header<PartnerApiResponse> response(Partner partner) {
