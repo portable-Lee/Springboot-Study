@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
 
     @Autowired
-    private OrderGroupRepository orderGroupRepository;
+    private OrderDetailRepository orderDetailRepository;
 
     @Autowired
-    private OrderDetailRepository orderDetailRepository;
+    private OrderGroupRepository orderGroupRepository;
 
     @Autowired
     private ItemRepository itemRepository;
@@ -51,7 +51,24 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 
     @Override
     public Header<OrderDetailApiResponse> update(Header<OrderDetailApiRequest> request) {
-        return null;
+
+        OrderDetailApiRequest body = request.getData();
+
+        return orderDetailRepository.findById(body.getId())
+                                    .map(orderDetail -> {
+                                        orderDetail.setStatus(body.getStatus())
+                                                .setArrivalDate(body.getArrivalDate())
+                                                .setQuantity(body.getQuantity())
+                                                .setTotalPrice(body.getTotalPrice())
+                                                .setOrderGroup(orderGroupRepository.getOne(body.getOrderGroupId()))
+                                                .setItem(itemRepository.getOne(body.getItemId()));
+
+                                        return orderDetail;
+                                    })
+                                    .map(changeOrderDetail -> orderDetailRepository.save(changeOrderDetail))
+                                    .map(newOrderDetail -> response(newOrderDetail))
+                                    .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     @Override
