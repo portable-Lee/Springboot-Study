@@ -59,7 +59,15 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 
     @Override
     public Header delete(Long id) {
-        return null;
+
+        return categoryRepository.findById(id)
+                                 .map(category -> {
+                                     categoryRepository.delete(category);
+
+                                     return Header.OK();
+                                 })
+                                 .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     private Header<CategoryApiResponse> response(Category category) {
