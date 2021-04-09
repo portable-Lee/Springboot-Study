@@ -90,6 +90,9 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     }
 
     private Header<ItemApiResponse> response(Item item) {
+
+        // String statusTitle = item.getStatus().getTitle();       // Enum 형태로 등록된 한글 title 또는 description으로 출력 가능
+
         ItemApiResponse body = ItemApiResponse.builder()
                                                 .id(item.getId())
                                                 .status(item.getStatus())
