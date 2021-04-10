@@ -3,11 +3,17 @@ package com.example.study.service;
 import com.example.study.controller.ifs.CrudInterface;
 import com.example.study.model.entity.Category;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
 import com.example.study.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryApiLogicService extends BaseService<CategoryApiRequest, CategoryApiResponse, Category> {
@@ -24,7 +30,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
         Category newCategory = baseRepository.save(category);
 
-        return response(newCategory);
+        return Header.OK(response(newCategory));
     }
 
     @Override
@@ -32,6 +38,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
         return baseRepository.findById(id)
                                  .map(category -> response(category))
+                                 .map(Header::OK)
                                  .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -50,6 +57,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                                  })
                                  .map(changeCategory -> baseRepository.save(changeCategory))
                                  .map(newCategory -> response(newCategory))
+                                 .map(Header::OK)
                                  .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -67,7 +75,24 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
     }
 
-    private Header<CategoryApiResponse> response(Category category) {
+    @Override
+    public Header<List<CategoryApiResponse>> search(Pageable pageable) {
+
+        Page<Category> categories = baseRepository.findAll(pageable);
+
+        List<CategoryApiResponse> categoryApiResponseList = categories.stream().map(this::response).collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                                          .totalPages(categories.getTotalPages())
+                                          .totalElements(categories.getTotalElements())
+                                          .currentPage(categories.getNumber())
+                                          .currentElements(categories.getNumberOfElements())
+                                          .build();
+
+        return Header.OK(categoryApiResponseList, pagination);
+    }
+
+    private CategoryApiResponse response(Category category) {
 
         CategoryApiResponse body = CategoryApiResponse.builder()
                                                       .id(category.getId())
@@ -75,7 +100,7 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                                                       .title(category.getTitle())
                                                       .build();
 
-        return Header.OK(body);
+        return body;
     }
 
 }

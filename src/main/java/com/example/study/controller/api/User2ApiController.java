@@ -7,10 +7,13 @@ import com.example.study.model.network.response.UserApiResponse;
 import com.example.study.service.User2ApiLogicService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user2")
@@ -37,6 +40,11 @@ public class User2ApiController implements CrudInterface<UserApiRequest, UserApi
 
     @Override
     public Header delete(Long id) {
+        return null;
+    }
+
+    @Override
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
         return null;
     }
 

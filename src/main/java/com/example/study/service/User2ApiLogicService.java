@@ -8,8 +8,10 @@ import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
 import com.example.study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -54,6 +56,11 @@ public class User2ApiLogicService implements CrudInterface<UserApiRequest, UserA
 
     @Override
     public Header delete(Long id) {
+        return null;
+    }
+
+    @Override
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
         return null;
     }
 
