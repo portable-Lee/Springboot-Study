@@ -8,7 +8,9 @@ import lombok.Getter;
 public enum OrderGroupStatus {
 
     WAITING(0, "대기", "상품 발송 대기"),
-    COMPLETE(0, "완료", "상품 발송 완료");
+    ORDERING(1, "주문중", "상품 주문 상태"),
+    CONFIRM(2, "확인", "상품 주문 확인"),
+    COMPLETE(3, "완료", "상품 발송 완료");
 
     private Integer id;
     private String title;

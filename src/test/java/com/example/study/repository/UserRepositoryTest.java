@@ -33,12 +33,12 @@ public class UserRepositoryTest extends StudyApplicationTests {
         User user = new User();
         user.setAccount(account);
         user.setPassword(password);
-        user.setStatus(status);
+        //user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);
 
-        User u = User.builder().account(account).password(password).status(status).email(email).build();    // Builder 패턴(생성자를 따로 선언하지 않아도 자동으로 변수에 맞게 생성)
+        //User u = User.builder().account(account).password(password).status(status).email(email).build();    // Builder 패턴(생성자를 따로 선언하지 않아도 자동으로 변수에 맞게 생성)
 
        User newUser = userRepository.save(user);
         assertNotNull(newUser);
