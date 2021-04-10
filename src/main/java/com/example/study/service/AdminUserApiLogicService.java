@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class AdminUserApiLogicService implements CrudInterface<AdminUserApiRequest, AdminUserApiResponse> {
-
-    @Autowired
-    private AdminUserRepository adminUserRepository;
+public class AdminUserApiLogicService extends BaseService<AdminUserApiRequest, AdminUserApiResponse, AdminUser> {
 
     @Override
     public Header<AdminUserApiResponse> create(Header<AdminUserApiRequest> request) {
@@ -30,7 +27,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
                                        .registeredAt(LocalDateTime.now())
                                        .build();
 
-        AdminUser newAdminUser = adminUserRepository.save(adminUser);
+        AdminUser newAdminUser = baseRepository.save(adminUser);
 
         return response(newAdminUser);
     }
@@ -38,7 +35,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
     @Override
     public Header<AdminUserApiResponse> read(Long id) {
 
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                                   .map(adminUser -> response(adminUser))
                                   .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
@@ -48,7 +45,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
 
         AdminUserApiRequest body = request.getData();
 
-        return adminUserRepository.findById(body.getId())
+        return baseRepository.findById(body.getId())
                                   .map(adminUser -> {
                                       adminUser.setAccount(body.getAccount())
                                               .setPassword(body.getPassword())
@@ -62,16 +59,16 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
 
                                       return adminUser;
                                   })
-                                  .map(changeAdminUser -> adminUserRepository.save(changeAdminUser))
+                                  .map(changeAdminUser -> baseRepository.save(changeAdminUser))
                                   .map(newAdminUser -> response(newAdminUser))
                                   .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
     @Override
     public Header delete(Long id) {
-        return adminUserRepository.findById(id)
+        return baseRepository.findById(id)
                                   .map(adminUser -> {
-                                      adminUserRepository.delete(adminUser);
+                                      baseRepository.delete(adminUser);
 
                                       return Header.OK();
                                   })
