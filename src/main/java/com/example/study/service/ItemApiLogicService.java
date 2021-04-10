@@ -110,7 +110,7 @@ public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResp
         return Header.OK(itemApiResponseList, pagination);
     }
 
-    private ItemApiResponse response(Item item) {
+    public ItemApiResponse response(Item item) {
 
         // String statusTitle = item.getStatus().getTitle();       // Enum 형태로 등록된 한글 title 또는 description으로 출력 가능
 
